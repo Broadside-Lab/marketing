@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atomic Canoe</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --color-bg: #0a0e13;
+            --color-bg-card: #111920;
+            --color-bg-card-hover: #17212b;
+            --color-red: #c0392b;
+            --color-red-light: #e74c3c;
+            --color-teal: #3a8f8b;
+            --color-teal-light: #5cbdb9;
+            --color-orange: #e8913a;
+            --color-cream: #ecf0f1;
+            --color-text: #d5dbe0;
+            --color-text-muted: #7f8c97;
+            --color-border: rgba(255,255,255,0.08);
+            --font-body: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --max-width: 1080px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { color: var(--color-teal-light); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--color-orange); }
+
+        /* ===== HEADER / NAV ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 14, 19, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        nav {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-cream);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+
+        .nav-links a {
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--color-cream); }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(58,143,139,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-logo {
+            width: 280px;
+            height: auto;
+            margin-bottom: 32px;
+            filter: drop-shadow(0 0 60px rgba(232,145,58,0.15));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-tagline {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            max-width: 520px;
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: inline-block;
+            padding: 14px 40px;
+            background: var(--color-red);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 6px;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .hero-cta:hover {
+            background: var(--color-red-light);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== SECTIONS ===== */
+        section {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 100px 24px;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--color-teal);
+            margin-bottom: 12px;
+        }
+
+        .section-heading {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-cream);
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .section-body {
+            max-width: 640px;
+            color: var(--color-text-muted);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .divider {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            border: none;
+            border-top: 1px solid var(--color-border);
+        }
+
+        /* ===== ABOUT ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+            margin-top: 48px;
+        }
+
+        .about-value {
+            padding: 28px;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            transition: background 0.25s, border-color 0.25s;
+        }
+        .about-value:hover {
+            background: var(--color-bg-card-hover);
+            border-color: rgba(255,255,255,0.14);
+        }
+
+        .about-value h3 {
+            font-size: 1.1rem;
+            color: var(--color-cream);
+            margin-bottom: 8px;
+        }
+
+        .about-value p {
+            font-size: 0.95rem;
+            color: var(--color-text-muted);
+            line-height: 1.7;
+        }
+
+        /* ===== GAMES ===== */
+        .game-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            margin-top: 48px;
+            padding: 40px;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+        }
+
+        .game-card-visual {
+            aspect-ratio: 16/10;
+            background: linear-gradient(135deg, #0d1a26 0%, #1a2d3d 50%, #0d1a26 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--color-border);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .game-card-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .game-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--color-cream);
+            margin-bottom: 8px;
+        }
+
+        .game-genre {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--color-orange);
+            margin-bottom: 16px;
+        }
+
+        .game-desc {
+            font-size: 0.95rem;
+            color: var(--color-text-muted);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+
+        .tag {
+            padding: 4px 12px;
+            background: rgba(58,143,139,0.12);
+            color: var(--color-teal-light);
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== CONTACT ===== */
+        .contact-row {
+            display: flex;
+            gap: 40px;
+            margin-top: 32px;
+        }
+
+        .contact-item {
+            font-size: 0.95rem;
+            color: var(--color-text-muted);
+        }
+
+        .contact-item strong {
+            display: block;
+            color: var(--color-cream);
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            border-top: 1px solid var(--color-border);
+            padding: 32px 24px;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .about-grid { grid-template-columns: 1fr; gap: 20px; }
+            .game-card { grid-template-columns: 1fr; }
+            .contact-row { flex-direction: column; gap: 20px; }
+            .hero-logo { width: 200px; }
+            .section-heading { font-size: 1.6rem; }
+            .nav-links { gap: 20px; }
+            .nav-links a { font-size: 0.75rem; }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links { display: none; }
+            section { padding: 64px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <header>
+        <nav>
+            <span class="nav-brand">Atomic Canoe</span>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#games">Games</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <img src="logo.png" alt="Atomic Canoe" class="hero-logo">
+        <p class="hero-tagline">An indie studio crafting strategy games with depth, personality, and just the right amount of chaos.</p>
+        <a href="#games" class="hero-cta">See Our Games</a>
+        <span class="scroll-hint">Scroll</span>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ABOUT -->
+    <section id="about">
+        <p class="section-label">Who We Are</p>
+        <h2 class="section-heading">Small team. Big explosions.</h2>
+        <p class="section-body">Atomic Canoe is an independent game studio focused on turn-based strategy and tactical games. We believe the best games are the ones where every decision matters and every match tells a different story.</p>
+
+        <div class="about-grid">
+            <div class="about-value">
+                <h3>Strategy First</h3>
+                <p>We design games around meaningful choices, not reflexes. If you can outsmart your opponent, you deserve to win.</p>
+            </div>
+            <div class="about-value">
+                <h3>Personality Built In</h3>
+                <p>From AI opponents with distinct playstyles to hand-crafted scenarios, our games have character that keeps you coming back.</p>
+            </div>
+            <div class="about-value">
+                <h3>Respect Your Time</h3>
+                <p>No filler, no grind. Our games are designed around satisfying sessions that fit into a real life.</p>
+            </div>
+            <div class="about-value">
+                <h3>Craft Over Scale</h3>
+                <p>We'd rather ship one polished game than ten forgettable ones. Every mechanic earns its place.</p>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- GAMES -->
+    <section id="games">
+        <p class="section-label">Our Games</p>
+        <h2 class="section-heading">What we're building</h2>
+
+        <div class="game-card">
+            <div class="game-card-visual"><img src="ship.png" alt="Broadside"></div>
+            <div>
+                <h3 class="game-title">Broadside</h3>
+                <p class="game-genre">Asymmetric Naval Tactics</p>
+                <p class="game-desc">Command a fleet in a battle of wits on the open sea. One side attacks, the other defends — with hidden forts, minefields, and AI commanders that adapt to how you play. Every match is a puzzle. Every move counts.</p>
+                <div class="tag-list">
+                    <span class="tag">Turn-Based</span>
+                    <span class="tag">Asymmetric</span>
+                    <span class="tag">Single Player</span>
+                    <span class="tag">iOS</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <p class="section-label">Get In Touch</p>
+        <h2 class="section-heading">Say hello</h2>
+        <p class="section-body">Interested in Atomic Canoe or want to follow our progress? Reach out.</p>
+
+        <div class="contact-row">
+            <div class="contact-item">
+                <strong>Email</strong>
+                <a href="mailto:hello@atomiccanoe.com">hello@atomiccanoe.com</a>
+            </div>
+            <div class="contact-item">
+                <strong>Location</strong>
+                Portland, OR
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p class="footer-text">&copy; 2026 Atomic Canoe. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
